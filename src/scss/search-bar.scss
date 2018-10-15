@@ -1,0 +1,26 @@
+
+@import "settings";
+
+.hubdb-searchbar {
+  padding: 10px;
+}
+
+.hubdb-searchbar--liner {
+  @include clearfix();
+}
+
+.hubdb-searchbar--col {
+
+}
+
+
+
+@media (min-width: $bp-md) {
+  
+  .hubdb-searchbar--col {
+    width: 33.3333%;
+    float: left;
+  }
+
+
+}

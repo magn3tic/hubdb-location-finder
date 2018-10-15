@@ -1,0 +1,22 @@
+@import "settings";
+
+
+.hubdb-gmap {
+
+}
+
+
+
+
+.hubdb-gmap--liner {
+  position: relative;
+  overflow: hidden;
+  height: 450px;
+  background: darken($white, 5%);
+}
+
+#hubdb-gmap-target {
+  position: absolute;
+  top:0; left:0;
+  width: 100%; height: 100%;
+}
