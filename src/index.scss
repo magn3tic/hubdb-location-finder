@@ -1,4 +1,6 @@
 
+@import "scss/settings";
+
 *,*:before,*:after {
   box-sizing: border-box;
 }
@@ -8,15 +10,65 @@ html, body, figure {
 }
 
 body {
+  line-height: 1.5;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-size: $base-font-size;
+  font-family: $font-family;
+  color: $body-font-color;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+h1,h2,h3,h4,h5,h6 {
+  line-height: 1.1;
+}
+
+select, button, input {
+  font-size: $base-font-size;
+  color: $body-font-color;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+
+.hubdb-locationfinder {
+  position: relative;
+
+  &.hubdb-loading, &.hubdb-fetching {
+    cursor: wait;
+  }
+}
+
+.hubdb-locationfinder--body {
+  border-bottom: 1px solid darken($white, 10%);
+  @include clearfix();
+}
+
+.hubdb-drawer {
+  overflow: hidden;
+}
+
+
+@media (min-width:$bp-md) {
+  
+
+  .hubdb-resultslist {
+    width: 35%;
+    position: absolute;
+    top:0; left:0;
+    height: 100%;
+    background: $white;
+    overflow: scroll;
+  }
+  .hubdb-gmap {
+    width: 65%;
+    float: right;
+    border-left: 1px solid darken($white, 10%);
+  }
+
+  .hubdb-locationfinder--body {
+    position: relative;
+  }
 }

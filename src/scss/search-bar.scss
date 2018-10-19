@@ -2,25 +2,68 @@
 @import "settings";
 
 .hubdb-searchbar {
-  padding: 10px;
+  padding: 1em;
+  border-bottom: 1px solid darken($white, 10%);
 }
 
 .hubdb-searchbar--liner {
-  @include clearfix();
+  
+}
+
+.hubdb-searchform {
+  display: flex;
+  flex-direction: column;
 }
 
 .hubdb-searchbar--col {
+  margin-bottom: 1em;
 
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: inline-block;
+    min-width: 120px;
+  }
 }
+
+
+.hubdb-searchbtn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  border: none;
+  padding: 15px 25px;
+  cursor: pointer;
+  color: $white;
+  text-transform: uppercase;
+  font-weight: bold;
+
+  &[disabled] {
+    cursor: not-allowed;
+  }
+}
+
 
 
 
 @media (min-width: $bp-md) {
-  
-  .hubdb-searchbar--col {
-    width: 33.3333%;
-    float: left;
+
+  .hubdb-searchform {
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
   }
+
+  .hubdb-searchbar--col {
+    margin-bottom: 0;
+  }
+  
+  // .hubdb-searchbar--col {
+  //   width: 33.3333%;
+  //   float: left;
+  // }
 
 
 }
