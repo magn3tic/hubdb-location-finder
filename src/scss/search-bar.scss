@@ -17,6 +17,7 @@
 
 .hubdb-searchbar--col {
   margin-bottom: 1em;
+  @include clearfix();
 
   &:last-of-type {
     margin-bottom: 0;
@@ -24,9 +25,30 @@
 
   label {
     display: inline-block;
-    min-width: 120px;
+    float: left;
+    text-align: center;
+    line-height: 2.75;
+
+    min-width: 100px;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    font-weight: bold;
+    height: 40px;
+    border: 1px solid darken($white, 20%);
+    border-right: none;
+  }
+
+  input[type="text"], select {
+    width: calc(100% - 100px);
+    height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid darken($white, 20%);
   }
 }
+
+
+
 
 
 .hubdb-searchbtn {
@@ -52,7 +74,7 @@
 
   .hubdb-searchform {
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
   }
 
@@ -67,3 +89,25 @@
 
 
 }
+
+
+
+
+@media (min-width:$bp-xl) {
+  
+  .hubdb-searchbar--col {
+    select {
+      width: 110px;
+    }
+  }
+  
+  .hubdb-searchbtn {
+    padding-right: 35px;
+    padding-left: 35px;
+  }
+
+}
+
+
+
+

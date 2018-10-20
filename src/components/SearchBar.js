@@ -22,14 +22,14 @@ class SearchBar extends React.Component {
           <form className="hubdb-searchform" onSubmit={e => _onFormSubmit(e)}>
             
             <div className="hubdb-searchbar--col hubdb-searchbar--location">
-              <label htmlFor="location-input">Your Location</label>
-              <input type="text" placeholder="Enter Your Location" 
+              <label htmlFor="location-input">Location</label>
+              <input type="text" placeholder="Search by City, State, or Zip" 
                      id="location-input" onChange={e => _onLocationChange(e)} 
-                     value={this.props.fieldvals.location} />
+                     value={this.props.fieldvals.location} autoComplete="off" />
             </div>
 
             <div className="hubdb-searchbar--col hubdb-searchbar--radius">
-              <label htmlFor="radius-input">Search Radius</label>
+              <label htmlFor="radius-input">Radius</label>
               <select name="radius" id="radius-input" onChange={e => _onRadiusChange(e)}
                       value={this.props.fieldvals.radius}>
                 <option value="10">10 mi</option>
