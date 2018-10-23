@@ -15,6 +15,7 @@ export const doGeocode = addr => {
   return Axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${apikey}`);
 };
 
+export const parseIfInt = value => Number.isInteger(value) ? parseInt(value) : value;
 
 
 // converts numeric degrees to radians

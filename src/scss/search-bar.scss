@@ -4,6 +4,7 @@
 .hubdb-searchbar {
   padding: 1em;
   border-bottom: 1px solid darken($white, 10%);
+  background: darken($white, 2%);
 }
 
 .hubdb-searchbar--liner {
@@ -16,6 +17,7 @@
 }
 
 .hubdb-searchbar--col {
+  position: relative;
   margin-bottom: 1em;
   @include clearfix();
 
@@ -34,19 +36,54 @@
     text-transform: uppercase;
     font-weight: bold;
     height: 40px;
+    background: $white;
     border: 1px solid darken($white, 20%);
+    border-radius: 3px 0 0 3px;
     border-right: none;
+    cursor: pointer;
   }
 
   input[type="text"], select {
+    outline: none;
+    border-radius: 0 3px 3px 0;
+    appearance: none;
     width: calc(100% - 100px);
     height: 40px;
     padding-left: 10px;
     padding-right: 10px;
+    background-color: $white;
     border: 1px solid darken($white, 20%);
+
+    &:focus {
+      box-shadow: darken($white, 15%) 0 2px 15px;
+    }
+  }
+
+
+  &.is-focused {
+    label {
+      background: $white;
+    }
   }
 }
 
+.select-caret {
+  display: block;
+  position: absolute;
+  top: 2px; right: 2px;
+  bottom: 2px;
+  width: 2.5em;
+  text-align: center;
+  background-color: $white;
+  pointer-events: none;
+  line-height: 2.2;
+
+  i {
+    font-size: 0.85em;
+    color: darken($white, 25%);
+    text-shadow: darken($white, 25%) 0 1px 0;
+  }
+}
 
 
 
@@ -61,6 +98,7 @@
   color: $white;
   text-transform: uppercase;
   font-weight: bold;
+  border-radius: 3px;
 
   &[disabled] {
     cursor: not-allowed;
@@ -102,8 +140,8 @@
   }
   
   .hubdb-searchbtn {
-    padding-right: 35px;
-    padding-left: 35px;
+    padding-right: 40px;
+    padding-left: 40px;
   }
 
 }

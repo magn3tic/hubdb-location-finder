@@ -23,6 +23,29 @@
 
 
 
+.hubdb-infowindow {
+  font-size: 110%;
+  font-weight: 400;
+  
+  h4 {
+    font-size: 1.3em;
+    margin: 0 0 .5em;
+  }
+  address {
+    font-size: 1em;
+    font-style: normal;
+    span {
+      display: block;
+    }
+  }
+}
+
+.hubdb-infowindow--liner {
+  padding: 20px 10px 10px 0;
+  min-width: 280px;
+}
+
+
 @media (min-width:$bp-lg) {
 
   

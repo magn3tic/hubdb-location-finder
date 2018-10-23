@@ -5,7 +5,7 @@ import SearchBar from './components/SearchBar';
 import GoogleMap from './components/GoogleMap';
 import ResultsList from './components/ResultsList';
 import LoadingState from './components/LoadingState';
-import { apiBase, geoLocate, doGeocode } from './lib/utilities.js';
+import { apiBase, geoLocate, doGeocode, parseIfInt } from './lib/utilities.js';
 
 
 class App extends React.Component {
@@ -14,7 +14,6 @@ class App extends React.Component {
     super(props);
     this.state = {
       loaded: false,
-      ready: false,
       fetching: false,
       error: false,
       paneltype: 'loading',
@@ -28,7 +27,8 @@ class App extends React.Component {
       
       tableinfo: {},
       tabledata: {},
-      searchResults: []
+      searchResults: [],
+      focusedIndex: false
     };
     this.globalEventHandlers();
   }
@@ -94,7 +94,7 @@ class App extends React.Component {
     
     if (this.state.geocode && this.state.location) {
       doGeocode(this.state.location).then(res => {
-        if (res.data.results[0].geometry) {
+        if (res.data.status === 'OK') {
           this.setState({ 
             searchPos: res.data.results[0].geometry.location, 
             geocode: false
@@ -112,18 +112,21 @@ class App extends React.Component {
     }
   }
   
+  //filter input handlers
   onLocationInput(e) {
     this.setState({ location: e.target.value, geocode: true });
   }
-  onRadiusChange(value) {
-    this.setState({ radius: value });
+  onRadiusChange(e) {
+    this.setState({ radius: parseIfInt(e.target.value) });
   }
   onResultsCountChange(e) {
-    this.setState({ resultscount: e.target.value });
+    this.setState({ resultscount: parseIfInt(e.target.value) });
   }
 
-  onMapMounted(map) {
-    this.map = map;
+  //location "focus" occurs when a marker is clicked
+  onIndexFocus(index, closeout=false) {
+    const focusedIndex = this.state.focusedIndex === index || closeout ? false : index;
+    this.setState({ focusedIndex });
   }
 
   //attempt navigator.geolcation when app mounts
@@ -138,8 +141,8 @@ class App extends React.Component {
       radius: this.onRadiusChange.bind(this),
       resultscount: this.onResultsCountChange.bind(this)
     };
+    const markerClickHandler = this.onIndexFocus.bind(this);
     const { location, radius, resultscount } = this.state;
-
     const outerClasses = ClassNames({
       'hubdb-locationfinder': true,
       'hubdb-loading': !this.state.loaded || this.state.fetching,
@@ -153,12 +156,12 @@ class App extends React.Component {
                    fieldvals={{location, radius, resultscount}} color={this.props.color} />
         <div className="hubdb-locationfinder--body">
           <ResultsList locations={this.state.searchResults} columns={this.props.columns} 
-                       color={this.props.color} searchpos={this.state.searchPos} 
-                       radius={radius} count={resultscount} />
-          <GoogleMap mounted={this.onMapMounted} locations={this.state.searchResults} 
-                     columns={this.props.columns} searchpos={this.state.searchPos} />
+                       color={this.props.color} searchpos={this.state.searchPos} radius={radius} 
+                       count={resultscount} focused={this.state.focused} itemFocus={markerClickHandler} />
+          <GoogleMap locations={this.state.searchResults} columns={this.props.columns} 
+                     searchpos={this.state.searchPos} fieldvals={{location, radius, resultscount}}
+                     focused={this.state.focusedIndex} markerClick={markerClickHandler} />
         </div>
-
         <LoadingState paneltype={this.state.paneltype} msg={this.state.panelmsg} />
       </div>
     );
