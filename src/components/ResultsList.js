@@ -1,32 +1,13 @@
 
 import React from 'react';
-import posed from 'react-pose';
 import ClassNames from 'classnames';
 import anime from 'animejs';
 
 import UtilBar from './UtilBar.js';
-import { getDistanceBetween } from '../lib/utilities.js';
+import { getDistanceBetween, checkMatchingProducts } from '../lib/utilities.js';
+import { Drawer } from '../lib/pose.js';
 
 import '../scss/results-list.scss';
-
-
-
-const Drawer = posed.div({
-  closed: { 
-    height: 0,
-    transition: {
-      duration: 200,
-      ease: 'circOut'
-    } 
-  },
-  open: { 
-    height: 'auto',
-    transition: {
-      duration: 330,
-      ease: 'circOut'
-    }
-  }
-});
 
 
 
@@ -35,7 +16,8 @@ class ResultsList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openIndex: false
+      openIndex: false,
+      filteredResults: null
     };
     this.listRef = React.createRef();
   }
@@ -53,6 +35,10 @@ class ResultsList extends React.Component {
     }
   }
 
+  setRenderedItems(count) {
+    this.setState({ filteredResults: count });
+  }
+
   doBackToTop() {
     anime({
       targets: this.listRef.current,
@@ -67,9 +53,17 @@ class ResultsList extends React.Component {
     const backToTop = this.doBackToTop.bind(this);
 
     const cols = this.props.columns;
+
+    const getHoursList = hours => {
+      const hoursArr = hours.split('.');
+      return Array.isArray(hoursArr) ? hoursArr.splice(-1, 1) : false;
+    };
+
+    let renderedItems = 0;
     
+    // List Item Render ----------------- //
     const renderItem = (item, i) => {
-      const key = 'resultsitem-'+i;
+
       const distance = getDistanceBetween(this.props.searchpos, {
         lat: item[cols.map_location].lat,
         lng: item[cols.map_location].long
@@ -78,14 +72,22 @@ class ResultsList extends React.Component {
         'hubdb-resultsitem': true,
         'is-focused': this.props.focused === i
       });
-      if ( (i + 1) > this.props.count || distance > this.props.radius ) {
+      const hasProductMatch = checkMatchingProducts(item[cols.products], this.props.products);
+
+      if ( (i + 1) >= this.props.count || distance > this.props.radius || !hasProductMatch) {
         return '';
+      } else {
+        renderedItems++;
       }
+
       return(
-        <li className={itemClasses} key={key} onClick={e => this.props.itemFocus(i)}>
+        <li className={itemClasses} key={'resultsitem-'+i} onClick={e => this.props.itemFocus(i)}>
           <div className="hubdb-resultsitem--liner">
             <h4>{item[cols.name]}</h4>
-            <p>{item[cols.products].replace(';', ',')}</p>
+            <p className="hubdb-resultsitem--brands">
+              <strong>Brands Available:</strong> 
+              <span>{item[cols.products].replace(';', ',')}</span>
+            </p>
             <address>
               <span>{item[cols.address_street]} <em>{item[cols.address_unit]}</em></span>
               <span>{item[cols.address_city]}, {item[cols.address_state]} {item[cols.address_zip]}</span>
@@ -96,19 +98,19 @@ class ResultsList extends React.Component {
             </button>
             <Drawer className="hubdb-drawer" pose={this.state.openIndex === i ? 'open' : 'closed'}>
               <div className="hubdb-resultsitem--info">
-                {item[cols.phone] !== 'NULL' &&
+                {(item[cols.phone] && item[cols.phone] !== 'NULL' && item[cols.phone].length > 0) &&
                 <div className="hubdb-info--phone">
                   <i className="icon-call-out" aria-hidden="true"></i>
                   <strong>Phone: </strong> 
                   <span>{item[cols.phone]}</span>
                 </div>}
-                {item[cols.fax] !== 'NULL' && 
+                {(item[cols.fax] && item[cols.fax] !== 'NULL' && item[cols.fax].length > 0) && 
                 <div className="hubdb-info--fax">
                   <i className="icon-printer" aria-hidden="true"></i>
                   <strong>Fax: </strong> 
                   <span>{item[cols.fax]}</span>
                 </div>}
-                {item[cols.email] !== 'NULL' &&
+                {(item[cols.email] && item[cols.email] !== 'NULL' && item[cols.email].length > 0) &&
                 <div className="hubdb-info--email">
                   <i className="icon-envelope-letter" aria-hidden="true"></i>
                   <strong>Email: </strong> 
@@ -122,17 +124,19 @@ class ResultsList extends React.Component {
                     <span>Hours:</span>
                   </h5>
                   <div className="hubdb-info--wkdayhours">
-                    <span>{item[cols.hours_weekday]}</span>
+                    <ul>{getHoursList(item[cols.hours_weekday]).map((item, i) => 
+                      <li key={'hours-li-'+i}>{item}</li>
+                      )}</ul>
                   </div>
                   
-                  /*{item[cols.hours_saturday] !== 'NULL' &&
+                  {/*{item[cols.hours_saturday] !== 'NULL' &&
                   <div className="hubdb-info--wkndhours">
                     <span>Saturday</span> <span>{item[cols.hours_saturday]}</span>
                   </div>}
                   {item[cols.hours_sunday] !== 'NULL' &&
                   <div className="hubdb-info--wkndhours">
                     <span>Saturday</span> <span>{item[cols.hours_sunday]}</span>
-                  </div>}*/
+                  </div>}*/}
                 </div>}
                 
               </div>
@@ -161,7 +165,7 @@ class ResultsList extends React.Component {
       } else {
         return(
           <div className="hubdb-empty-resultmsg">
-            <p>Enter a city, state, or zipcode above and hit <code>enter</code> to find your closest locations!</p>
+            <p>Search Above To Find A Dealer Near You!</p>
           </div>
         );
       }
@@ -172,7 +176,9 @@ class ResultsList extends React.Component {
         <div className="hubdb-resultslist--liner">
           {renderList()}
         </div>
-        {this.props.locations.length > 5 && <UtilBar backToTop={backToTop} />}
+        {renderedItems > 5 && <UtilBar backToTop={backToTop} color={this.props.color} />}
+        {renderedItems === 0 && 
+          <div className="hubdb-no-results"><p>No Results Found Mathcing Your Criteria</p></div>}
       </div>
     );
   }

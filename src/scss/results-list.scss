@@ -27,7 +27,6 @@
   }
 
   &:hover {
-    
     &:before {
       opacity: 1;
     }
@@ -35,7 +34,7 @@
   
   h4 {
     font-size: 1.25em;
-    margin: 0 0 .5em;
+    margin: 0 0 .2em;
   }
 
   address {
@@ -51,6 +50,15 @@
 
 .hubdb-resultsitem--liner {
   padding: 1.5em 1em 2em;
+}
+
+.hubdb-resultsitem--brands {
+  margin: 0 0 1.5em;
+  font-size: 0.8em;
+
+  strong {
+    margin-right: 5px;
+  }
 }
 
 .hubdb-resultsitem--btn {
@@ -125,7 +133,8 @@
 }
 
 
-.hubdb-empty-resultmsg {
+.hubdb-empty-resultmsg,
+.hubdb-no-results {
   padding: 30px 20px;
 
   p {
@@ -147,16 +156,37 @@
     appearance: none;
     display: block;
     width: 100%;
-    padding: 1em;
+    padding: 1.1em;
     cursor: pointer;
+    transition: background .3s ease;
+
+    font-weight: bold;
+
+    text-align: left;
+
+    svg {
+      display:block; position:absolute;
+      width: 20px; height: 20px;
+      left: -2px; top:-2px;
+      stroke: darken($white, 25%);
+      transition: stroke .3s ease;
+    }
 
     &:hover {
+      background: darken($white, 4%);
 
+      svg {
+        stroke: $dark;
+      }
     }
   }
 }
 
-
+.hubdb-utilbar--arr {
+  display: inline-block;
+  position: relative;
+  padding-left: 30px;
+}
 
 
 

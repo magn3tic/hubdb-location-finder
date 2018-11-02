@@ -2,10 +2,8 @@
 
 
 .hubdb-gmap {
-
+  border-bottom: 1px solid darken($white, 10%);
 }
-
-
 
 
 .hubdb-gmap--liner {
@@ -52,6 +50,10 @@
   .hubdb-searchbtn {
     padding-top: 13px;
     padding-bottom: 13px;
+  }
+
+  .hubdb-gmap {
+    border-bottom: none;
   }
 
 }

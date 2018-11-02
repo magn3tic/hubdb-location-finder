@@ -185,7 +185,8 @@ class App extends React.Component {
                      focused={this.state.focusedIndex} markerClick={markerClickHandler} color={this.props.color} />
           <ResultsList locations={this.state.searchResults} columns={this.props.columns} 
                        color={this.props.color} searchpos={this.state.searchPos} radius={radius} 
-                       count={resultscount} products={collections} focused={this.state.focused} itemFocus={markerClickHandler} />
+                       count={resultscount} products={collections} focused={this.state.focused} 
+                       itemFocus={markerClickHandler} />
         </div>
         <LoadingState paneltype={this.state.paneltype} msg={this.state.panelmsg} color={this.props.color}
                       close={loadClose} />

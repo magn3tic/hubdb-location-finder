@@ -62,27 +62,27 @@ class SearchBar extends React.Component {
             </div>
             
             <div className={colClasses.collection}>
-              <div className="hubdb-searchform--dropdown">
-                <label htmlFor="">Collection</label>
-                <div className="hubdb-searchform--dropdown-panel">
-                  <div className="hubdb-searchform--chkbx">
-                    <input type="checkbox" id="western-chkbx" value="western-collection" 
-                           onChange={e => _onCollectionsChange(e)} 
-                           checked={collections.indexOf('western-collection') !== -1} />
-                    <label htmlFor="western-chkbx">
-                      <span className="hubdb-chkbx-fake"></span>
-                      <span>Western</span>
-                    </label>
-                  </div>
-                  <div className="hubdb-searchform--chkbx">
-                    <input type="checkbox" id="carolina-chkbx" value="carolina-collection" 
-                           onChange={e => _onCollectionsChange(e)} 
-                           checked={collections.indexOf('carolina-collection') !== -1} />
-                    <label htmlFor="carolina-chkbx">
-                      <span className="hubdb-chkbx-fake"></span>
-                      <span>Carolina</span>
-                    </label>
-                  </div>
+              <label htmlFor="">Collection</label>
+              <div className="hubdb-searchform--dropdown-panel" tabIndex="0">
+                <div className="hubdb-searchform--chkbx">
+                  <input type="checkbox" id="western-chkbx" value="western-collection" 
+                         onChange={e => _onCollectionsChange(e)} 
+                         checked={collections.indexOf('western-collection') !== -1}
+                         onFocus={e => this.fieldFocusHandler('collection')} />
+                  <label htmlFor="western-chkbx">
+                    <span className="hubdb-chkbx-fake"></span>
+                    <span>Western</span>
+                  </label>
+                </div>
+                <div className="hubdb-searchform--chkbx">
+                  <input type="checkbox" id="carolina-chkbx" value="carolina-collection" 
+                         onChange={e => _onCollectionsChange(e)} 
+                         checked={collections.indexOf('carolina-collection') !== -1}
+                         onFocus={e => this.fieldFocusHandler('collection')} />
+                  <label htmlFor="carolina-chkbx">
+                    <span className="hubdb-chkbx-fake"></span>
+                    <span>Carolina</span>
+                  </label>
                 </div>
               </div>
             </div>

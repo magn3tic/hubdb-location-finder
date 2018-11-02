@@ -3,6 +3,7 @@
 
 .hubdb-searchbar {
   padding: 1em;
+  background: $white;
   border-bottom: 1px solid darken($white, 10%);
 }
 
@@ -28,26 +29,26 @@
     display: inline-block;
     float: left;
     text-align: center;
-    line-height: 3.35;
-    min-width: 100px;
-    font-size: 0.8em;
+    line-height: 4;
+    font-size: 0.7em;
+    padding-left: 10px;
     text-transform: uppercase;
     font-weight: bold;
     height: 44px;
-    background: $white;
-    border: 1px solid darken($white, 20%);
-    border-radius: 3px 0 0 3px;
-    border-right: none;
+
+    position: absolute;
+    top:0; left:0;
+  
     cursor: pointer;
   }
 
   input[type="text"], select {
     outline: none;
-    border-radius: 0 3px 3px 0;
+    border-radius: 3px;
     appearance: none;
-    width: calc(100% - 100px);
+    width: 100%;
     height: 44px;
-    padding-left: 10px;
+    padding-left: 90px;
     padding-right: 10px;
     background-color: $white;
     border: 1px solid darken($white, 20%);
@@ -59,9 +60,7 @@
 
 
   &.is-focused {
-    label {
-      background: $white;
-    }
+    
   }
 }
 
@@ -71,6 +70,8 @@
   
   > label {
     float: none;
+    pointer-events: none;
+    cursor: pointer;
   }
 
   .hubdb-searchform--chkbx {
@@ -79,7 +80,7 @@
     overflow: hidden;
 
     &:first-of-type {
-      margin-left: 12px;
+      margin-left: 10px;
     }
     
     input[type="checkbox"] {
@@ -137,12 +138,18 @@
 
 
 .hubdb-searchform--dropdown-panel {
-  float: left;
+  outline: none;
   height: 44px;
   background: $white;
-  width: calc(100% - 100px);
-  border-radius: 0 3px 3px 0;
+  padding-left: 90px;
+  width: 100%;
+  border-radius: 3px;
   border: 1px solid darken($white, 20%);
+  white-space: nowrap;
+
+  &:focus, .is-focused & {
+    box-shadow: darken($white, 15%) 0 2px 15px;
+  }
 }
 
 
@@ -250,7 +257,8 @@
   
   .hubdb-searchbar--col {
     select {
-      width: 110px;
+      width: 160px;
+      padding-left: 75px;
     }
   }
   

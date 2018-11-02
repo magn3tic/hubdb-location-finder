@@ -46,7 +46,7 @@ export const checkMatchingProducts = (str, stateVal) => {
       matches.push(val);
     }
   });
-  return matches.length === stateVal.length;
+  return matches.length > 0;
 };
 
 // converts numeric degrees to radians

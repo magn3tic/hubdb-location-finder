@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { getDistanceBetween } from '../lib/utilities.js';
+import { getDistanceBetween, checkMatchingProducts } from '../lib/utilities.js';
 import * as mapThemes from '../mapthemes/themes.js';
 
 import '../scss/google-map.scss';
@@ -19,6 +19,7 @@ class GoogleMap extends React.Component {
     this.infoWindows = [];
     this.distances = [];
     this.positions = [];
+    this.products = [];
     this.markersInBounds = 4; //number of markers to show in visible map area
     this.mapRef = React.createRef();
   }
@@ -27,6 +28,8 @@ class GoogleMap extends React.Component {
   doMarkerSetup() {
     this.distances = [];
     this.positions = [];
+    this.products = [];
+
     this.bounds = new window.google.maps.LatLngBounds();
     const cols = this.props.columns;
     
@@ -41,7 +44,7 @@ class GoogleMap extends React.Component {
       this.distances.push(distance);
 
       const products = location[cols.products];
-      console.log(products);
+      this.products.push(products);
 
       const markerConfig = {
         map: this.gmap,
@@ -109,14 +112,16 @@ class GoogleMap extends React.Component {
     let visibleCount = 0;
     this.markers.forEach((item, index) => {
       this.setMarkerVisibility(index, false);
-      const distance = this.distances[index];
-      if (distance < this.props.fieldvals.radius && (index + 1) < this.props.fieldvals.resultscount) {
-        visibleCount++;
+
+      if (this.distances[index] < this.props.fieldvals.radius && 
+         (index + 1) < this.props.fieldvals.resultscount &&
+         checkMatchingProducts(this.products[index], this.props.fieldvals.collections)) {
+        //visibleCount++;
         this.setMarkerVisibility(index, true);
-        this.extendMapBounds(visibleCount, this.positions[index]);
+        //this.extendMapBounds(visibleCount, this.positions[index]);
       }
     });
-    this.fitMapBounds();
+    //this.fitMapBounds();
   }
   
   doMarkerDestroy() {
@@ -140,7 +145,9 @@ class GoogleMap extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, prevState) {
-    return true;
+    return (nextProps.locations !== this.props.locations || 
+            nextProps.focused !== this.props.focused ||
+            nextProps.fieldvals !== this.props.fieldvals);
   }
   
   // Watch for prop changes
@@ -166,9 +173,8 @@ class GoogleMap extends React.Component {
         this.setActiveInfoWindow(this.props.focused);
       }
     }
-    //if selected radius changes
-    if (prevProps.fieldvals.radius !== this.props.fieldvals.radius || 
-        prevProps.fieldvals.results !== this.props.fieldvals.results) {
+    //if any search field value changes - reset visible markers
+    if (prevProps.fieldvals !== this.props.fieldvals) {
       this.resetVisibleMarkers();
     }
   }
