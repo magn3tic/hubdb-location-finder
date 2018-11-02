@@ -177,7 +177,7 @@ class ResultsList extends React.Component {
           {renderList()}
         </div>
         {renderedItems > 5 && <UtilBar backToTop={backToTop} color={this.props.color} />}
-        {renderedItems === 0 && 
+        {(renderedItems === 0 && this.props.locations.length > 0) && 
           <div className="hubdb-no-results"><p>No Results Found Mathcing Your Criteria</p></div>}
       </div>
     );
