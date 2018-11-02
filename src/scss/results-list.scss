@@ -59,6 +59,7 @@
   border: none;
   background: none;
   padding: 2px 0;
+  font-size: 0.95em;
   font-weight: bold;
 }
 
@@ -66,7 +67,7 @@
   padding-top: 1em;
   padding-bottom: 1.5em;
   line-height: 1.35;
-
+  
   i[class^="icon-"] {
     margin-right: 7px;
   }
@@ -135,13 +136,23 @@
 
 
 .hubdb-utilbar {
-  padding: 1em;
+  padding: 0;
 }
 
 .hubdb-utilbar--backtop {
 
   button {
+    border:none; background:none;
+    outline: none;
+    appearance: none;
+    display: block;
+    width: 100%;
+    padding: 1em;
     cursor: pointer;
+
+    &:hover {
+
+    }
   }
 }
 

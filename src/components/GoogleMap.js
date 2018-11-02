@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { getDistanceBetween } from '../lib/utilities.js';
-import { lightDream } from '../mapthemes/themes.js';
+import * as mapThemes from '../mapthemes/themes.js';
 
 import '../scss/google-map.scss';
 
@@ -17,14 +17,17 @@ class GoogleMap extends React.Component {
     this.defaultLatLng = {lat: 40.730610, lng: -73.935242};
     this.markers = [];
     this.infoWindows = [];
+    this.distances = [];
+    this.positions = [];
     this.markersInBounds = 4; //number of markers to show in visible map area
     this.mapRef = React.createRef();
   }
   
   // build an array of all possible markers for the search
   doMarkerSetup() {
+    this.distances = [];
+    this.positions = [];
     this.bounds = new window.google.maps.LatLngBounds();
-
     const cols = this.props.columns;
     
     this.props.locations.forEach((location, i) => {
@@ -32,7 +35,14 @@ class GoogleMap extends React.Component {
         lat: location[cols.map_location].lat,
         lng: location[cols.map_location].long
       };
+      this.positions.push(pos);
+      
       const distance = getDistanceBetween(this.props.searchpos, pos);
+      this.distances.push(distance);
+
+      const products = location[cols.products];
+      console.log(products);
+
       const markerConfig = {
         map: this.gmap,
         visible: false,
@@ -41,6 +51,15 @@ class GoogleMap extends React.Component {
         infoWindow: {
           content: this.getMarkerInfoWindow(location, distance),
           maxWidth: 400
+        },
+        icon: {
+          anchor: new window.google.maps.Point(0,0),
+          path: "M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z",
+          fillColor: this.props.color,
+          fillOpacity: 0.8,
+          strokeWeight: 2,
+          strokeColor: this.props.color,
+          scale: 0.65
         }
       };
       const mrkr = new window.google.maps.Marker(markerConfig);
@@ -52,17 +71,13 @@ class GoogleMap extends React.Component {
       if (i <= this.props.fieldvals.resultscount && distance <= this.props.fieldvals.radius) {
         mrkr.setVisible(true);
       }
-
       this.markers.push(mrkr);
       this.infoWindows.push(infoWindow);
-      
-      if (i < this.markersInBounds) {
-        this.bounds.extend(new window.google.maps.LatLng(pos.lat, pos.lng));
-        if (i + 1 === this.markersInBounds) {
-          this.gmap.fitBounds(this.bounds);
-        }
-      }
+      this.extendMapBounds(i, pos);
     });
+
+    //fit bounds when done with markers
+    this.fitMapBounds();
   }
   
   setActiveInfoWindow(index) {
@@ -71,14 +86,37 @@ class GoogleMap extends React.Component {
     infoWindow.open(this.gmap, marker);
     this.gmap.panTo(marker.getPosition());
   }
+
   closeOpenInfoWindow(index) {
-    const marker = this.markers[index];
     const infoWindow = this.infoWindows[index];
     infoWindow.close();
   }
 
   setMarkerVisibility(index, visible) {
-    this.markers[index].setMarkerVisibility(visible);
+    this.markers[index].setVisible(visible);
+  }
+
+  extendMapBounds(i, pos) {
+    if (i < this.markersInBounds) {
+      this.bounds.extend(new window.google.maps.LatLng(pos.lat, pos.lng));
+    }
+  }
+  fitMapBounds() {
+    this.gmap.fitBounds(this.bounds);
+  }
+  
+  resetVisibleMarkers() {
+    let visibleCount = 0;
+    this.markers.forEach((item, index) => {
+      this.setMarkerVisibility(index, false);
+      const distance = this.distances[index];
+      if (distance < this.props.fieldvals.radius && (index + 1) < this.props.fieldvals.resultscount) {
+        visibleCount++;
+        this.setMarkerVisibility(index, true);
+        this.extendMapBounds(visibleCount, this.positions[index]);
+      }
+    });
+    this.fitMapBounds();
   }
   
   doMarkerDestroy() {
@@ -86,23 +124,26 @@ class GoogleMap extends React.Component {
     this.markers = [];
     this.infoWindows = [];
   }
-
+  
+  // Component mount - initialize map
   componentDidMount() {
     this.gmap = new window.google.maps.Map(this.mapRef.current, {
       center: this.defaultLatLng,
       zoom: 8,
+      minZoom: 5,
+      maxZoom: 15,
       scrollwheel: false,
-      styles: lightDream
+      fullscreenControl: false,
+      styles: mapThemes.ultraLight
     });
     this.bounds = new window.google.maps.LatLngBounds();
   }
 
   shouldComponentUpdate(nextProps, prevState) {
-    console.log('Prev Props: ', this.props);
-    console.log('Next Props: ', nextProps);
     return true;
   }
   
+  // Watch for prop changes
   componentDidUpdate(prevProps, prevState) {
     let init = false;
     // when locations become available for first time (searchpos is gauranteed)
@@ -118,13 +159,17 @@ class GoogleMap extends React.Component {
     }
     //focused location has changed, close open infowindows, and open the current
     if (prevProps.focused !== this.props.focused) {
-      
       if (prevProps.focused !== false) {
         this.closeOpenInfoWindow(prevProps.focused);
       } 
       if (this.props.focused !== false) {
         this.setActiveInfoWindow(this.props.focused);
       }
+    }
+    //if selected radius changes
+    if (prevProps.fieldvals.radius !== this.props.fieldvals.radius || 
+        prevProps.fieldvals.results !== this.props.fieldvals.results) {
+      this.resetVisibleMarkers();
     }
   }
   

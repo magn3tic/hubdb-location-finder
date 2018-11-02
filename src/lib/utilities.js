@@ -4,19 +4,50 @@ import Axios from 'axios';
 
 export const apiBase = 'https://api.hubapi.com/hubdb/api/v2/tables';
 
+
+// navigator geolocate
 export const geoLocate = () => {
   return new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(pos => resolve(pos), () => reject('error'));
   });
 };
 
+
+// google maps geocode
 export const doGeocode = addr => {
   const apikey = 'AIzaSyCmQltveJTrzgy3GKGdNPVkiAbdlT3chIE';
   return Axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${apikey}`);
 };
 
+
+//parse integer
 export const parseIfInt = value => Number.isInteger(value) ? parseInt(value) : value;
 
+
+//slugify text
+export const slugify = text => {
+  let specialChars = {"à":'a',"ä":'a',"á":'a',"â":'a',"æ":'a',"å":'a',"ë":'e',"è":'e',"é":'e', "ê":'e',"î":'i',"ï":'i',"ì":'i',"í":'i',"ò":'o',"ó":'o',"ö":'o',"ô":'o',"ø":'o',"ù":'o',"ú":'u',"ü":'u',"û":'u',"ñ":'n',"ç":'c',"ß":'s',"ÿ":'y',"œ":'o',"ŕ":'r',"ś":'s',"ń":'n',"ṕ":'p',"ẃ":'w',"ǵ":'g',"ǹ":'n',"ḿ":'m',"ǘ":'u',"ẍ":'x',"ź":'z',"ḧ":'h',"·":'-',"/":'-',"_":'-',",":'-',":":'-',";":'-'};
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/./g,(target, index, str) => specialChars[target] || target)
+    .replace(/&/g, '-and-')        
+    .replace(/[^\w\-]+/g, '')      
+    .replace(/\-\-+/g, '-')         
+    .replace(/^-+/, '')           
+    .replace(/-+$/, '');            
+}
+
+
+export const checkMatchingProducts = (str, stateVal) => {
+  const cellval = str.split(';').map(val => slugify(val));
+  let matches = [];
+  stateVal.forEach(val => {
+    if (cellval.includes(val)) {
+      matches.push(val);
+    }
+  });
+  return matches.length === stateVal.length;
+};
 
 // converts numeric degrees to radians
 const toRadian = val => val * Math.PI / 180;
@@ -34,4 +65,13 @@ export const getDistanceBetween = (pos, dest) => {
   return (d * 0.62137).toFixed(1);
 };
 
+
+//detect if its being viewed through an iframe
+export const appInsideIframe = () => {
+  try {
+    return window.self !== window.top;
+  } catch (e) {
+    return true;
+  }
+};
 

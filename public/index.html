@@ -22,21 +22,40 @@
     <title>Location Finder</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
     <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCmQltveJTrzgy3GKGdNPVkiAbdlT3chIE"></script>
+    <script>
+      window.onload = function() {
+        window.hubdbLocationFinder({
+          portal: '3974799',
+          table: '1027020',
+          color: '#91785A',
+          columnsMap: {
+            name: '1',
+            address_street: '2',
+            address_unit: '',
+            address_state: '5',
+            address_city: '4',
+            address_zip: '6',
+            email: '12',
+            phone: '11',
+            fax: '999',
+            hours_weekday: '10',
+            hours_saturday: '999',
+            hours_sunday: '999',
+            map_location: '15',
+            products: '14'
+          },
+          locationColumnName: 'map_location',
+          fieldDefaults: {
+            radius: '50',
+            resultscount: '50'
+          },
+          mapTheme: 'default'
+        });
+      };
+    </script>
   </head>
   <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
+    <noscript>You need to enable JavaScript to use this tool.</noscript>
     <div id="hubdb-locationfinder-root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

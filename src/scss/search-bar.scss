@@ -4,7 +4,6 @@
 .hubdb-searchbar {
   padding: 1em;
   border-bottom: 1px solid darken($white, 10%);
-  background: darken($white, 2%);
 }
 
 .hubdb-searchbar--liner {
@@ -29,13 +28,12 @@
     display: inline-block;
     float: left;
     text-align: center;
-    line-height: 2.75;
-
+    line-height: 3.35;
     min-width: 100px;
-    font-size: 0.85em;
+    font-size: 0.8em;
     text-transform: uppercase;
     font-weight: bold;
-    height: 40px;
+    height: 44px;
     background: $white;
     border: 1px solid darken($white, 20%);
     border-radius: 3px 0 0 3px;
@@ -48,7 +46,7 @@
     border-radius: 0 3px 3px 0;
     appearance: none;
     width: calc(100% - 100px);
-    height: 40px;
+    height: 44px;
     padding-left: 10px;
     padding-right: 10px;
     background-color: $white;
@@ -67,16 +65,97 @@
   }
 }
 
+
+
+.hubdb-searchbar--collection {
+  
+  > label {
+    float: none;
+  }
+
+  .hubdb-searchform--chkbx {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+
+    &:first-of-type {
+      margin-left: 12px;
+    }
+    
+    input[type="checkbox"] {
+      position: absolute;
+      left: -99px;
+
+      &:checked + label {
+       
+        .hubdb-chkbx-fake {
+          background: darken($white, 4%);
+          &:after {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      }
+    }
+
+    label {
+      position: relative;
+      min-width: 0px;
+      border: none;
+      padding: 14px;
+      padding-left: 20px;
+      height: auto;
+      float: none;
+      line-height: 1;
+      font-size: .9em;
+      font-weight: normal;
+      text-transform: none;
+
+      .hubdb-chkbx-fake {
+        display: block; position:absolute;
+        left:0; top: 13px;
+        width: 16px; height: 16px;
+        border-radius: 50%;
+        border: 1px solid darken($white, 20%);
+        transition: background .2s ease;
+
+        &:after {
+          content:""; display:block; position:absolute;
+          width: 8px; height: 8px;
+          left: 3px; top: 3px;
+          border-radius: 50%;
+          background: darken($white, 20%);
+          opacity: 0;
+          transform: scale(2.5);
+          transition: all .2s ease;
+        }
+      }
+    }
+  }
+
+}
+
+
+.hubdb-searchform--dropdown-panel {
+  float: left;
+  height: 44px;
+  background: $white;
+  width: calc(100% - 100px);
+  border-radius: 0 3px 3px 0;
+  border: 1px solid darken($white, 20%);
+}
+
+
 .select-caret {
   display: block;
   position: absolute;
   top: 2px; right: 2px;
   bottom: 2px;
-  width: 2.5em;
+  width: 2em;
   text-align: center;
   background-color: $white;
   pointer-events: none;
-  line-height: 2.2;
+  line-height: 2.5;
 
   i {
     font-size: 0.85em;
@@ -100,8 +179,15 @@
   font-weight: bold;
   border-radius: 3px;
 
+  &:active {
+    transform: translateY(1px);
+  }
+
   &[disabled] {
     cursor: not-allowed;
+    &:active {
+      transform: translateY(0);
+    }
   }
 }
 
@@ -109,6 +195,16 @@
 
 
 @media (min-width: $bp-md) {
+
+  .hubdb-searchbar {
+    position: absolute;
+    top:0; left:0; width:100%;
+    z-index: 1299;
+  }
+
+  .hubdb-locationfinder {
+    padding-top: 77px;
+  }
 
   .hubdb-searchform {
     flex-direction: row;
@@ -124,9 +220,28 @@
   //   width: 33.3333%;
   //   float: left;
   // }
+}
 
+
+
+@media (min-width: $bp-lg) {
+  
+  .hubdb-searchbar--col {
+    select {
+      width: 100px;
+    }
+    input[type="text"] {
+      width: 250px;
+    }
+  }
+
+  .hubdb-searchbtn {
+    padding-right: 45px;
+    padding-left: 45px;
+  }
 
 }
+
 
 
 
@@ -140,8 +255,8 @@
   }
   
   .hubdb-searchbtn {
-    padding-right: 40px;
-    padding-left: 40px;
+    padding-right: 55px;
+    padding-left: 55px;
   }
 
 }

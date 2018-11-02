@@ -2,23 +2,15 @@
 import React from 'react';
 
 
-class UtilBar extends React.Component {
+const UtilBar = ({backToTop}) => {
 
-  constructor(props) {
-    super(props);
-  }
-
-
-  render() {
-    return(
-      <div className="hubdb-utilbar">
-        <div className="hubdb-utilbar--backtop">
-          <button>Back To Top</button>
-        </div>
-        
+  return(
+    <div className="hubdb-utilbar">
+      <div className="hubdb-utilbar--backtop">
+        <button onClick={e => backToTop(e)}>Back To Top</button>
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default UtilBar;

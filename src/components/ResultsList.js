@@ -2,6 +2,8 @@
 import React from 'react';
 import posed from 'react-pose';
 import ClassNames from 'classnames';
+import anime from 'animejs';
+
 import UtilBar from './UtilBar.js';
 import { getDistanceBetween } from '../lib/utilities.js';
 
@@ -52,7 +54,12 @@ class ResultsList extends React.Component {
   }
 
   doBackToTop() {
-    this.listRef.current.scrollTop = 0;
+    anime({
+      targets: this.listRef.current,
+      scrollTop: 0,
+      duration: 900,
+      easing: 'easeOutCirc'
+    });
   }
 
   render() {
@@ -60,6 +67,7 @@ class ResultsList extends React.Component {
     const backToTop = this.doBackToTop.bind(this);
 
     const cols = this.props.columns;
+    
     const renderItem = (item, i) => {
       const key = 'resultsitem-'+i;
       const distance = getDistanceBetween(this.props.searchpos, {
@@ -68,7 +76,7 @@ class ResultsList extends React.Component {
       });
       const itemClasses = ClassNames({
         'hubdb-resultsitem': true,
-        'is-focused': this.props.focused == i
+        'is-focused': this.props.focused === i
       });
       if ( (i + 1) > this.props.count || distance > this.props.radius ) {
         return '';
@@ -77,6 +85,7 @@ class ResultsList extends React.Component {
         <li className={itemClasses} key={key} onClick={e => this.props.itemFocus(i)}>
           <div className="hubdb-resultsitem--liner">
             <h4>{item[cols.name]}</h4>
+            <p>{item[cols.products].replace(';', ',')}</p>
             <address>
               <span>{item[cols.address_street]} <em>{item[cols.address_unit]}</em></span>
               <span>{item[cols.address_city]}, {item[cols.address_state]} {item[cols.address_zip]}</span>
@@ -90,17 +99,20 @@ class ResultsList extends React.Component {
                 {item[cols.phone] !== 'NULL' &&
                 <div className="hubdb-info--phone">
                   <i className="icon-call-out" aria-hidden="true"></i>
-                  <strong>Phone:</strong> <span>{item[cols.phone]}</span>
+                  <strong>Phone: </strong> 
+                  <span>{item[cols.phone]}</span>
                 </div>}
                 {item[cols.fax] !== 'NULL' && 
                 <div className="hubdb-info--fax">
                   <i className="icon-printer" aria-hidden="true"></i>
-                  <strong>Fax:</strong> <span>{item[cols.fax]}</span>
+                  <strong>Fax: </strong> 
+                  <span>{item[cols.fax]}</span>
                 </div>}
                 {item[cols.email] !== 'NULL' &&
                 <div className="hubdb-info--email">
                   <i className="icon-envelope-letter" aria-hidden="true"></i>
-                  <strong>Email:</strong> <a href={'mailto:'+item[cols.email]}><span>{item[cols.email]}</span></a>
+                  <strong>Email: </strong> 
+                  <a href={'mailto:'+item[cols.email]} style={{color: this.props.color}}><span>{item[cols.email]}</span></a>
                 </div>}
                 
                 {item[cols.hours_weekday] !== 'NULL' &&
@@ -109,18 +121,18 @@ class ResultsList extends React.Component {
                     <i className="icon-clock" aria-hidden="true"></i>
                     <span>Hours:</span>
                   </h5>
-               
                   <div className="hubdb-info--wkdayhours">
-                    <span>Mon - Fri</span> <span>{item[cols.hours_weekday]}</span>
+                    <span>{item[cols.hours_weekday]}</span>
                   </div>
-                  {item[cols.hours_saturday] !== 'NULL' &&
+                  
+                  /*{item[cols.hours_saturday] !== 'NULL' &&
                   <div className="hubdb-info--wkndhours">
                     <span>Saturday</span> <span>{item[cols.hours_saturday]}</span>
                   </div>}
                   {item[cols.hours_sunday] !== 'NULL' &&
                   <div className="hubdb-info--wkndhours">
                     <span>Saturday</span> <span>{item[cols.hours_sunday]}</span>
-                  </div>}
+                  </div>}*/
                 </div>}
                 
               </div>
@@ -160,7 +172,7 @@ class ResultsList extends React.Component {
         <div className="hubdb-resultslist--liner">
           {renderList()}
         </div>
-        {!!(this.props.locations.length) && <UtilBar backToTop={backToTop} />}
+        {this.props.locations.length > 5 && <UtilBar backToTop={backToTop} />}
       </div>
     );
   }

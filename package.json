@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
+    "animejs": "^2.2.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -46,6 +47,7 @@
     "react-dom": "^16.5.2",
     "react-pose": "^3.3.6",
     "resolve": "1.8.1",
+    "rewire": "^4.0.1",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
     "terser-webpack-plugin": "1.1.0",
@@ -58,7 +60,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "package": "node scripts/build-library.js",
+    "deploy": "surge build hubdb-location-finder.surge.sh",
+    "db-fix": "node hubdb-location-column.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -111,6 +116,8 @@
     ]
   },
   "devDependencies": {
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "request": "^2.88.0",
+    "simple-rate-limiter": "^0.2.3"
   }
 }

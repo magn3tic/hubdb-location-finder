@@ -8,12 +8,22 @@ class SearchBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      focused: false //'location', 'radius', 'results'
+      focused: false //'location', 'radius', etc
     };
+    this.locationInputRef = React.createRef();
   }
 
   fieldFocusHandler(value) {
     this.setState({ focused: value });
+  }
+  fieldBlurHandler() {
+    this.setState({ focused: false });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.focusLocation && this.props.focusLocation) {
+      this.locationInputRef.current.focus();
+    }
   }
 
   render() {
@@ -21,27 +31,63 @@ class SearchBar extends React.Component {
     const _onLocationChange = this.props.handlers.location;
     const _onRadiusChange = this.props.handlers.radius;
     const _onResultscountChange = this.props.handlers.resultscount;
+    const _onCollectionsChange = this.props.handlers.collections;
 
-    const radiusClasses = ClassNames({
-      'hubdb-searchbar--col': true,
-      'hubdb-searchbar--radius': true,
-      'is-focused': this.state.focused === 'radius'
+    const focusOpts = ['location', 'radius', 'results', 'collection'];
+    const colClasses = {};
+    
+    focusOpts.forEach(item => {
+      const colOpts = { 
+        'hubdb-searchbar--col': true,
+        'is-focused': this.state.focused === item 
+      };
+      colOpts[`hubdb-searchbar--${item}`] = true;
+      colClasses[item] = ClassNames(colOpts);
     });
+
+    const { collections } = this.props.fieldvals;
 
     return(
       <div className="hubdb-searchbar">
         <div className="hubdb-searchbar--liner">
         
           <form className="hubdb-searchform" onSubmit={e => _onFormSubmit(e)}>
-            
-            <div className="hubdb-searchbar--col hubdb-searchbar--location">
+
+            <div className={colClasses.location}>
               <label htmlFor="location-input">Location</label>
               <input type="text" placeholder="City, State, or Zip" 
-                     id="location-input" onChange={e => _onLocationChange(e)} 
-                     value={this.props.fieldvals.location} autoComplete="off" />
+                     id="location-input" onChange={e => _onLocationChange(e)} value={this.props.fieldvals.location} 
+                     autoComplete="off" onFocus={e => this.fieldFocusHandler('location')} onBlur={e => this.fieldBlurHandler(e)}
+                     ref={this.locationInputRef} />
             </div>
-
-            <div className={radiusClasses}>
+            
+            <div className={colClasses.collection}>
+              <div className="hubdb-searchform--dropdown">
+                <label htmlFor="">Collection</label>
+                <div className="hubdb-searchform--dropdown-panel">
+                  <div className="hubdb-searchform--chkbx">
+                    <input type="checkbox" id="western-chkbx" value="western-collection" 
+                           onChange={e => _onCollectionsChange(e)} 
+                           checked={collections.indexOf('western-collection') !== -1} />
+                    <label htmlFor="western-chkbx">
+                      <span className="hubdb-chkbx-fake"></span>
+                      <span>Western</span>
+                    </label>
+                  </div>
+                  <div className="hubdb-searchform--chkbx">
+                    <input type="checkbox" id="carolina-chkbx" value="carolina-collection" 
+                           onChange={e => _onCollectionsChange(e)} 
+                           checked={collections.indexOf('carolina-collection') !== -1} />
+                    <label htmlFor="carolina-chkbx">
+                      <span className="hubdb-chkbx-fake"></span>
+                      <span>Carolina</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className={colClasses.radius}>
               <label htmlFor="radius-input">Radius</label>
               <select name="radius" id="radius-input" onChange={e => _onRadiusChange(e)}
                       onFocus={e => this.fieldFocusHandler('radius')} value={this.props.fieldvals.radius}>
@@ -56,7 +102,7 @@ class SearchBar extends React.Component {
               </span>
             </div>
 
-            <div className="hubdb-searchbar--col hubdb-searchbar--resultscount">
+            <div className={colClasses.results}>
               <label htmlFor="resultscount-input">Results</label>
               <select name="resultscount" id="resultscount-input" onChange={e => _onResultscountChange(e)} 
                       value={this.props.fieldvals.resultscount}>
