@@ -68,7 +68,7 @@ class SearchBar extends React.Component {
                   <input type="radio" name="collection" id="western-chkbx" value="western-collection" 
                          onChange={e => _onCollectionsChange(e)} 
                          checked={collections.indexOf('western-collection') !== -1}
-                         onFocus={e => this.fieldFocusHandler('collection')} />
+                         onFocus={e => this.fieldFocusHandler('collection')} onBlur={e => this.fieldBlurHandler(e)} />
                   <label htmlFor="western-chkbx">
                     <span className="hubdb-chkbx-fake"></span>
                     <span>Western</span>
@@ -78,7 +78,7 @@ class SearchBar extends React.Component {
                   <input type="radio" name="collection" id="carolina-chkbx" value="carolina-collection" 
                          onChange={e => _onCollectionsChange(e)} 
                          checked={collections.indexOf('carolina-collection') !== -1}
-                         onFocus={e => this.fieldFocusHandler('collection')} />
+                         onFocus={e => this.fieldFocusHandler('collection')} onBlur={e => this.fieldBlurHandler(e)} />
                   <label htmlFor="carolina-chkbx">
                     <span className="hubdb-chkbx-fake"></span>
                     <span>Carolina</span>

@@ -120,14 +120,7 @@ class App extends React.Component {
   }
   onCollectionsChange(e) {
     const val = e.target.value;
-    const updated = [...this.state.collections];
-    const itemPos = updated.indexOf(val);
-    if (itemPos !== -1) {
-      updated.splice(itemPos, 1);
-    } else {
-      updated.push(val);
-    }
-    this.setState({ collections: updated });
+    this.setState({ collections: [val] });
   }
   onRadiusChange(e) {
     this.setState({ radius: parseInt(e.target.value) });
