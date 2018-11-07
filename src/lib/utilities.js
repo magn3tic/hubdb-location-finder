@@ -13,7 +13,7 @@ export const geoLocate = () => {
 
 // google maps geocode
 export const doGeocode = addr => {
-  const geocoder = new window.google.maps.Geocoder;
+  const geocoder = new window.google.maps.Geocoder();
   const args = {};
   const argProp = (addr.lat || addr.lng) ? 'location' : 'address';
   

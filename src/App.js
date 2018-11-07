@@ -91,10 +91,13 @@ class App extends React.Component {
     
     if (this.state.geocode && this.state.location) {
       doGeocode(this.state.location).then(res => {
-        if (res.data.status === 'OK') {
+        if (res[0].geometry.location) {
           this.setState({ 
-            searchPos: res.data.results[0].geometry.location, 
-            location: res.data.results[0].formatted_address,
+            searchPos: {
+              lat: res[0].geometry.location.lat(),
+              lng: res[0].geometry.location.lng()
+            }, 
+            location: res[0].formatted_address,
             geocode: false
           });
           this.getSearchResults();
