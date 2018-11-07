@@ -55,6 +55,7 @@
 
     &:focus {
       box-shadow: darken($white, 15%) 0 2px 15px;
+      border: 1px solid darken($white, 25%) !important;
     }
   }
 
@@ -83,7 +84,7 @@
       margin-left: 10px;
     }
     
-    input[type="checkbox"] {
+    input[type="checkbox"], input[type="radio"] {
       position: absolute;
       left: -99px;
 
@@ -149,6 +150,7 @@
 
   &:focus, .is-focused & {
     box-shadow: darken($white, 15%) 0 2px 15px;
+    border: 1px solid darken($white, 25%);
   }
 }
 

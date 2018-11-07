@@ -1,7 +1,5 @@
 
-import Axios from 'axios';
-
-
+// hubdb endpoint base
 export const apiBase = 'https://api.hubapi.com/hubdb/api/v2/tables';
 
 
@@ -15,9 +13,34 @@ export const geoLocate = () => {
 
 // google maps geocode
 export const doGeocode = addr => {
-  const apikey = 'AIzaSyCmQltveJTrzgy3GKGdNPVkiAbdlT3chIE';
-  return Axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${apikey}`);
+  const geocoder = new window.google.maps.Geocoder;
+  const args = {};
+  const argProp = (addr.lat || addr.lng) ? 'location' : 'address';
+  
+  args[argProp] = addr;
+
+  return new Promise((resolve, reject) => {
+    geocoder.geocode(args, (results, status) => {
+      if (status === 'OK') {
+        resolve(results);
+      } else {
+        reject(results);
+      }
+    });
+  });
 };
+
+//pull city from geocode response
+export const getReverseGeocodedLocation = results => {
+  let returned = false;
+  results.forEach(result => {
+    if (result.types.includes('locality')) {
+      returned = result;
+    }
+  });
+  return returned.formatted_address;
+};
+
 
 
 //parse integer

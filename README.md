@@ -5,11 +5,19 @@ An embedable google maps location finder for Hubspot customers with the website 
 
 It makes use of HubDB's built-in sorting functionality - orderBy=geo_distance() - as well as the Haversine formula to determine the visitors closest locations.
 
-http://hubdb-location-finder.surge.sh
+Example - http://hubdb-location-finder.surge.sh
 
+
+### Building
+
+To build a production version - `npm run package` - this will run scripts/build-library.js
+
+
+### Embedding
+
+Files are hosted in the clients Hubspot File Manager - inside a folder called `location-finder-embed`
 
 ``` Html
-
 <!-- ProStone Location Finder Embed -->
 <div id="hubdb-locationfinder-root"></div>
 <link rel="stylesheet" href="https://cdn2.hubspot.net/hubfs/3974799/location-finder-embed/main.css">
@@ -17,11 +25,17 @@ http://hubdb-location-finder.surge.sh
 <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCmQltveJTrzgy3GKGdNPVkiAbdlT3chIE"></script>
 <script src="https://cdn2.hubspot.net/hubfs/3974799/location-finder-embed/main.js"></script>
 <script>
-  window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
+  if ('hubdbLocationFinder' in window) {
     window.hubdbLocationFinder({
       portal: '3974799',
+      // hubdb table id (end of url when editing table)
       table: '1027020',
+      // accent color for buttons, links, map markers
       color: '#91785A',
+      // this saves an api request 
+      // but, you'll have to hit the table details endpoint in postman to get the column id's
+      // https://developers.hubspot.com/docs/methods/hubdb/v2/get_table
       columnsMap: {
         name: '1',
         address_street: '2',
@@ -45,8 +59,8 @@ http://hubdb-location-finder.surge.sh
       },
       mapTheme: 'default'
     });
-  };
+  }
+});
 </script>
-
 ```
 

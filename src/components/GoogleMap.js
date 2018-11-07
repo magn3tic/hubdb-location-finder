@@ -109,19 +109,14 @@ class GoogleMap extends React.Component {
   }
   
   resetVisibleMarkers() {
-    let visibleCount = 0;
     this.markers.forEach((item, index) => {
       this.setMarkerVisibility(index, false);
-
       if (this.distances[index] < this.props.fieldvals.radius && 
          (index + 1) < this.props.fieldvals.resultscount &&
          checkMatchingProducts(this.products[index], this.props.fieldvals.collections)) {
-        //visibleCount++;
         this.setMarkerVisibility(index, true);
-        //this.extendMapBounds(visibleCount, this.positions[index]);
       }
     });
-    //this.fitMapBounds();
   }
   
   doMarkerDestroy() {

@@ -171,6 +171,10 @@ class ResultsList extends React.Component {
       }
     };
 
+    const emptyMsg = this.props.products.length === 0 ? 
+                     'Choose A Collection Above To View Results.' : 
+                     'No Results Found Mathcing Your Criteria.';
+
     return(
       <div className="hubdb-resultslist" ref={this.listRef}>
         <div className="hubdb-resultslist--liner">
@@ -178,7 +182,9 @@ class ResultsList extends React.Component {
         </div>
         {renderedItems > 5 && <UtilBar backToTop={backToTop} color={this.props.color} />}
         {(renderedItems === 0 && this.props.locations.length > 0) && 
-          <div className="hubdb-no-results"><p>No Results Found Mathcing Your Criteria</p></div>}
+          <div className="hubdb-no-results">
+            <p>{emptyMsg}</p>
+          </div>}
       </div>
     );
   }

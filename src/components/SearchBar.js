@@ -65,7 +65,7 @@ class SearchBar extends React.Component {
               <label htmlFor="">Collection</label>
               <div className="hubdb-searchform--dropdown-panel" tabIndex="0">
                 <div className="hubdb-searchform--chkbx">
-                  <input type="checkbox" id="western-chkbx" value="western-collection" 
+                  <input type="radio" name="collection" id="western-chkbx" value="western-collection" 
                          onChange={e => _onCollectionsChange(e)} 
                          checked={collections.indexOf('western-collection') !== -1}
                          onFocus={e => this.fieldFocusHandler('collection')} />
@@ -75,7 +75,7 @@ class SearchBar extends React.Component {
                   </label>
                 </div>
                 <div className="hubdb-searchform--chkbx">
-                  <input type="checkbox" id="carolina-chkbx" value="carolina-collection" 
+                  <input type="radio" name="collection" id="carolina-chkbx" value="carolina-collection" 
                          onChange={e => _onCollectionsChange(e)} 
                          checked={collections.indexOf('carolina-collection') !== -1}
                          onFocus={e => this.fieldFocusHandler('collection')} />
@@ -118,7 +118,7 @@ class SearchBar extends React.Component {
             
             <div className="hubdb-searchbar--col hubdb-searchbar--button">
               <button type="submit" className="hubdb-searchbtn" style={{backgroundColor: this.props.color}}
-                      disabled={this.props.fieldvals.location.length < 2}>
+                      disabled={this.props.fieldvals.location.length < 2 || collections.length === 0}>
                 <span>Search</span>
               </button>
             </div>

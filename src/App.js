@@ -5,7 +5,7 @@ import SearchBar from './components/SearchBar';
 import GoogleMap from './components/GoogleMap';
 import ResultsList from './components/ResultsList';
 import LoadingState from './components/LoadingState';
-import { apiBase, geoLocate, doGeocode } from './lib/utilities.js';
+import { apiBase, geoLocate, doGeocode, getReverseGeocodedLocation } from './lib/utilities.js';
 
 
 class App extends React.Component {
@@ -21,7 +21,7 @@ class App extends React.Component {
       geocode: true,
       searchPos: { lat: null, lng: null },
       location: '',
-      collections: ['western-collection', 'carolina-collection'],
+      collections: [],
       focusLocation: false,
       radius: 50,
       resultscount: 50,
@@ -73,7 +73,11 @@ class App extends React.Component {
         geocode: false
       });
       doGeocode(this.state.searchPos)
-        .then(pos => this.getSearchResults())
+        .then(pos => {
+          const location = getReverseGeocodedLocation(pos);
+          this.setState({ location });
+          this.getSearchResults();
+        })
         .catch(err => this.getSearchResults());
     }).catch(message => {
       this.setState({ loaded: true });
