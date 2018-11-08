@@ -160,12 +160,15 @@ class ResultsList extends React.Component {
     }; //end render item
 
     const renderList = () => {
+      const noSearchMsg = this.props.location.length < 3 ?
+                          'Search Above To Find A Dealer Near You!' :
+                          'Choose A Collection Above and Press Enter to View Results.';
       if (this.props.locations.length) {
         return <ul>{this.props.locations.map((location, i) => renderItem(location, i))}</ul>;
       } else {
         return(
           <div className="hubdb-empty-resultmsg">
-            <p>Search Above To Find A Dealer Near You!</p>
+            <p>{noSearchMsg}</p>
           </div>
         );
       }

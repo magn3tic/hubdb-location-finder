@@ -177,6 +177,7 @@
 
 
 .hubdb-searchbtn {
+  outline: none;
   display: block;
   width: 100%;
   text-align: center;
@@ -188,12 +189,19 @@
   font-weight: bold;
   border-radius: 3px;
 
+  &:hover {
+    box-shadow: darken($white, 15%) 0 2px 15px;
+  }
   &:active {
     transform: translateY(1px);
+  }
+  &:focus {
+    box-shadow: darken($white, 15%) 0 3px 20px;
   }
 
   &[disabled] {
     cursor: not-allowed;
+    &:hover { box-shadow: none; }
     &:active {
       transform: translateY(0);
     }

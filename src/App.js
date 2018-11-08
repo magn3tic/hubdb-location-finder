@@ -1,10 +1,12 @@
 import React from 'react';
 import Axios from 'axios';
 import ClassNames from 'classnames';
+
 import SearchBar from './components/SearchBar';
 import GoogleMap from './components/GoogleMap';
 import ResultsList from './components/ResultsList';
 import LoadingState from './components/LoadingState';
+
 import { apiBase, geoLocate, doGeocode, getReverseGeocodedLocation } from './lib/utilities.js';
 
 
@@ -53,7 +55,6 @@ class App extends React.Component {
           this.setState({ error: true });
         } else {
           const searchResults = response.data.objects.map(obj => obj.values);
-          //console.log('Search Results: ', searchResults);
           this.setState({ searchResults, fetching: false, loaded: true });
         }
       }).catch(err => {
@@ -172,7 +173,6 @@ class App extends React.Component {
       'hubdb-error': this.state.error,
       'hubdb-embedded': !this.props.framed
     });
-
     const { location, radius, resultscount, collections } = this.state;
 
     return (
@@ -183,7 +183,7 @@ class App extends React.Component {
           <GoogleMap locations={this.state.searchResults} columns={this.props.columns} 
                      searchpos={this.state.searchPos} fieldvals={{location, radius, resultscount, collections}}
                      focused={this.state.focusedIndex} markerClick={markerClickHandler} color={this.props.color} />
-          <ResultsList locations={this.state.searchResults} columns={this.props.columns} 
+          <ResultsList locations={this.state.searchResults} location={location} columns={this.props.columns} 
                        color={this.props.color} searchpos={this.state.searchPos} radius={radius} 
                        count={resultscount} products={collections} focused={this.state.focused} 
                        itemFocus={markerClickHandler} />
