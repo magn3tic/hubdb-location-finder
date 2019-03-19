@@ -1,6 +1,7 @@
 
 import React from 'react';
 import ClassNames from 'classnames';
+import Tooltip from './Tooltip';
 import '../scss/search-bar.scss';
 
 
@@ -121,6 +122,7 @@ class SearchBar extends React.Component {
                       disabled={this.props.fieldvals.location.length < 2 || collections.length === 0}>
                 <span>Search</span>
               </button>
+              { collections.length < 1 && <Tooltip message="Please enter your location & select a collection first." /> }
             </div>
 
           </form>
